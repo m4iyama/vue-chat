@@ -5,11 +5,11 @@ module.exports = {
   },
   'extends': [
     'plugin:vue/essential',
-    'plugin:prettier/essential',
-    '@vue/prettier'
   ],
   rules: {
-    'prettier/prettier': 'error',
+    'semi': [2, 'always'],
+    'comma-dangle': [2, 'always-multiline'],
+    'quotes': [2, 'single']
   },
   parserOptions: {
     parser: 'babel-eslint'

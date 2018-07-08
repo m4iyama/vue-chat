@@ -1,21 +1,42 @@
-import Vue from "vue";
-import Router from "vue-router";
-import Home from "./views/Home.vue";
-import About from "./views/About.vue";
+import Vue from 'vue';
+import Firebase from 'firebase';
+import Router from 'vue-router';
+import RoomsView from './views/RoomsView.vue';
+import LoginView from './views/LoginView.vue';
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   routes: [
     {
-      path: "/",
-      name: "home",
-      component: Home
+      path: '*',
+      redirect: 'rooms',
     },
     {
-      path: "/about",
-      name: "about",
-      component: About
-    }
-  ]
+      path: '/',
+      name: 'rooms',
+      component: RoomsView,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginView,
+    },
+  ],
 });
+
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(v => v.meta.requiresAuth);
+  const { currentUser } = Firebase.auth();
+
+  if (requiresAuth && !currentUser) {
+    next('/login');
+  } else {
+    next();
+  }
+});
+
+export default router;
