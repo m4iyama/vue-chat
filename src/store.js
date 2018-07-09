@@ -5,33 +5,33 @@ import router from './router';
 
 Vue.use(Vuex);
 
-const store = new Vuex.Store({
+const user = {
+  state: {
+    userInfo: {},
+  },
+  actions: {
+    fetchUserInfo({ state, rootState }) {
+      Firebase.firestore().collection('users').doc(rootState.login.currentUser.uid).get().then(userInfo => {
+        state.userInfo = userInfo;
+      });
+    },
+  },
+};
+const login = {
   state: {
     currentUser: null,
-    userInfo: {},
-    registerForm: {
-      username: '',
-      email: '',
-      password: '',
-    },
-    loginForm: {
-      email: '',
-      password: '',
-    },
+    showLoginForm: true,
   },
   mutations: {
     setCurrentUser(state, user) {
       state.currentUser = user;
     },
+    toggleForm(state) {
+      state.showLoginForm = !state.showLoginForm;
+    },
   },
   actions: {
-    fetchUserInfo({ state }) {
-      Firebase.firestore().collection('users').doc(state.currentUser.uid).get().then(userInfo => {
-        state.userInfo = userInfo;
-      });
-    },
-    register({ commit, dispatch, state }) {
-      const { username, email, password } = state.registerForm;
+    register({ commit, dispatch, state }, { username, email, password }) {
       Firebase.auth().createUserWithEmailAndPassword(email, password).then(response => {
         commit('setCurrentUser', response.user);
 
@@ -45,8 +45,7 @@ const store = new Vuex.Store({
         });
       });
     },
-    login({ commit, dispatch, state }) {
-      const { email, password } = state.loginForm;
+    login({ commit, dispatch, state }, { email, password }) {
       Firebase.auth().signInWithEmailAndPassword(email, password).then(response => {
         commit('setCurrentUser', response.user);
         dispatch('fetchUserInfo').then(() => {
@@ -55,7 +54,13 @@ const store = new Vuex.Store({
       });
     },
   },
-});
+};
 
+const store = new Vuex.Store({
+  modules: {
+    user,
+    login,
+  },
+});
 
 export default store;
