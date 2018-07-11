@@ -14,18 +14,20 @@
 
 <script>
   export default {
-    state: {
-      email: '',
-      password: '',
+    data() {
+      return {
+        email: '',
+        password: '',
+      };
     },
     methods: {
       handleSubmit() {
         const { email, password } = this;
 
-        this.$store.dispatch('login', { email, password });
+        this.$store.dispatch('login/login', { email, password });
       },
       handleLinkClick() {
-        this.$store.commit('toggleForm');
+        this.$store.commit('login/toggleForm');
       },
     },
   };

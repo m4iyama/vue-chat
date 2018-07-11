@@ -16,7 +16,9 @@
       RegisterForm,
     },
     computed: {
-      ...mapState(['showLoginForm']),
+      ...mapState({
+        showLoginForm: state => state.login.showLoginForm,
+      }),
     },
   };
 </script>

@@ -15,19 +15,21 @@
 
 <script>
   export default {
-    state: {
-      username: '',
-      email: '',
-      password: '',
+    data() {
+      return {
+        username: '',
+        email: '',
+        password: '',
+      };
     },
     methods: {
       handleSubmit() {
         const { username, email, password } = this;
 
-        this.$store.dispatch('register', { username, email, password });
+        this.$store.dispatch('login/register', { username, email, password });
       },
       handleLinkClick() {
-        this.$store.commit('toggleForm');
+        this.$store.commit('login/toggleForm');
       },
     },
   };

@@ -6,6 +6,7 @@ import router from './router';
 Vue.use(Vuex);
 
 const user = {
+  namespaced: true,
   state: {
     userInfo: {},
   },
@@ -18,6 +19,7 @@ const user = {
   },
 };
 const login = {
+  namespaced: true,
   state: {
     currentUser: null,
     showLoginForm: true,
@@ -32,6 +34,7 @@ const login = {
   },
   actions: {
     register({ commit, dispatch, state }, { username, email, password }) {
+      console.log('register');
       Firebase.auth().createUserWithEmailAndPassword(email, password).then(response => {
         commit('setCurrentUser', response.user);
 
@@ -48,7 +51,7 @@ const login = {
     login({ commit, dispatch, state }, { email, password }) {
       Firebase.auth().signInWithEmailAndPassword(email, password).then(response => {
         commit('setCurrentUser', response.user);
-        dispatch('fetchUserInfo').then(() => {
+        dispatch('user/fetchUserInfo').then(() => {
           router.push('rooms');
         });
       });

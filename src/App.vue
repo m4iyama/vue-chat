@@ -13,6 +13,11 @@
     components: {
       Navigation,
     },
+    computed: {
+      ...mapState({
+        currentUser: state => state.login.currentUser,
+      }),
+    },
   };
 </script>
 
